@@ -1,0 +1,102 @@
+/* Login Page Styles */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;  /* Ensure the page takes full height */
+  background-color:white;
+}
+
+.login-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers content vertically */
+  align-items: center;  /* Centers content horizontally */
+  background: url('http://alum.fisat.ac.in/img/fisat.jpeg') no-repeat center center/cover; /* Background image */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  width: 100%;
+  background-size: cover; /* Ensures background image covers the area */
+  color: white; /* White text color */
+  height: 500px; /* Set a fixed height for the login card */
+}
+
+/* Heading */
+.login-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Form styles */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center input fields vertically */
+  align-items: center; /* Center input fields horizontally */
+  width: 100%;
+}
+
+.input-field {
+  width: 80%; /* Input width */
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.input-field:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Submit Button */
+.submit-button {
+  width: 80%; /* Button width */
+  padding: 12px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.submit-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Error or success message */
+.message {
+  text-align: center;
+  margin-top: 10px;
+  color: #d9534f;
+  font-size: 1rem;
+}
+
+/* Register Link */
+.register-link {
+  text-align: center;
+  margin-top: auto;  /* Push the link to the bottom */
+}
+
+.register-link a {
+  color: white;
+  font-size: large;
+  font-style: italic;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}

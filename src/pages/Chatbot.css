@@ -1,0 +1,28 @@
+/* Add this CSS to center the chatbot */
+.chatbot-container {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;     /* Centers vertically */
+    position: fixed;         /* Fixes the position on the page */
+    top: 50%;                /* Centers vertically in the middle */
+    left: 50%;               /* Centers horizontally in the middle */
+    transform: translate(-50%, -50%); /* Offsets by 50% of its own width/height */
+    width: 100%;             /* You can adjust this width */
+    height: 100%;            /* You can adjust this height */
+    z-index: 9999;           /* Makes sure the chatbot is on top */
+  }
+  
+  /* Optionally, you can style the toggle button */
+  .chatbot-toggle {
+    position: fixed;
+    bottom: 20px;  /* Adjust the position of the toggle button */
+    right: 20px;
+    font-size: 24px;  /* Adjust the size */
+    background-color: #25d366;  /* Example style */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 15px;
+    cursor: pointer;
+  }
+  
