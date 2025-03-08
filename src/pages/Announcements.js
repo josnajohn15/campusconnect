@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import "./Announcements.css";
 
-const Announcements= () => {
+const Announcements = () => {
   // List of announcements
   const announcements = [
     { title: "Semester Exams Schedule Released", date: "2025-03-05", type: "📅" },
@@ -19,7 +19,7 @@ const Announcements= () => {
 
   return (
     <div className="announcement-container">
-      <h1>📢 Important Announcements</h1>
+      <h1 className="announcement-title">📢 Important Announcements</h1>
 
       <div className="announcement-grid">
         {sortedAnnouncements.map((announcement, index) => (

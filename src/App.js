@@ -6,8 +6,7 @@ import Announcements from './pages/Announcements';  // Correct path to Announcem
 import Events from './pages/Events';  // Correct path to Events page
 import Resources from './pages/Resources';  // Correct path to Resources page
 import ChatbotComponent from './pages/Chatbot'; // Ensure correct path
- // Correct path to Chatbot page
-import Feedback from './pages/Feedback';  // Correct path to Feedback page
+ // Correct path to Feedback page
 import Home from './pages/Home';
 import Register from './pages/Register';
 import GroupChats from './pages/GroupChats'; // Adjust the path to the correct location
@@ -52,10 +51,7 @@ const App = () => {
           path="/chatbot" 
           element={<><Navbar /><ChatbotComponent /></>} 
         />
-        <Route 
-          path="/feedback" 
-          element={<><Navbar /><Feedback /></>} 
-        />
+        
         <Route 
           path="/logout" 
           element={<><Navbar /><Logout /></>} 

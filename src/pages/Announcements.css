@@ -1,77 +1,65 @@
-/* 🌟 Glassmorphism Theme for Announcements */
+/* Announcements Page - Sleek & Consistent Styling */
+
 .announcement-container {
-    text-align: center;
-    font-family: "Poppins", sans-serif;
-    padding: 20px;
-    min-height: 100vh;
-    background: url("https://source.unsplash.com/1600x900/?college,campus") no-repeat center center/cover;
-    backdrop-filter: blur(5px);
-    color: rgb(174, 129, 129);
-  }
-  
-  /* Title */
-  h1 {
-    font-size: 34px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    background: linear-gradient(to right, #ffcc00, #ff6600);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    text-shadow: 3px 3px 15px rgba(141, 129, 129, 0.3);
-  }
-  
-  /* Grid Layout */
-  .announcement-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    padding: 10px;
-    justify-items: center;
-  }
-  
-  /* Glassmorphism Announcement Cards */
-  .announcement-card {
-    width: 300px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s;
-  }
-  
-  .announcement-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
-  }
-  
-  /* Announcement Header */
-  .announcement-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .announcement-icon {
-    font-size: 28px;
-  }
-  
-  /* Announcement Title */
-  .announcement-header h3 {
-    font-size: 18px;
-    font-weight: bold;
-    color: rgb(31, 30, 30);
-    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.5);
-  }
-  
-  /* Announcement Date */
-  .announcement-footer {
-    font-size: 14px;
-    color: #0a0a0a;
-    opacity: 0.8;
-    text-shadow: 1px 1px 5px rgba(47, 84, 102, 0.3);
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a, #1c1c1c);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  padding: 40px;
+}
+
+.announcement-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #00c3ff;
+  text-shadow: 0px 0px 10px rgba(0, 195, 255, 0.8);
+}
+
+.announcement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.announcement-card {
+  background: linear-gradient(135deg, #121212, #1c1c1c);
+  border: 2px solid rgba(0, 195, 255, 0.5);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 195, 255, 0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.announcement-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 195, 255, 0.8);
+}
+
+.announcement-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.announcement-icon {
+  font-size: 2rem;
+}
+
+.announcement-footer p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 10px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
