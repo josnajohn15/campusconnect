@@ -1,75 +1,104 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import moment from "moment";
 import "./Events.css";
 
 const Events = () => {
-  // Event list including past and upcoming events
-  const events = [
-    { title: "The Power of Self-Belief: Turning Dreams Into Reality", date: "2025-03-04" },
-    { title: "3 Days Workshop on REVIT", date: "2025-03-10" },
-    { title: "COMPETITIVE CODING WORKSHOP", date: "2025-03-21" },
-    { title: "PROF. ANURANJ MEMORIAL TROPHY – Intra-College Cricket Tournament", date: "2025-02-14" },
-    { title: "ARANGU - Annual Cultural Fest", date: "2025-03-28" }, // Upcoming event to track
-    { title: "ACCTHPA – 2025", date: "2025-07-18" }
-  ];
+    const [events, setEvents] = useState([]);
+    const [title, setTitle] = useState("");
+    const [date, setDate] = useState("");
+    const [description, setDescription] = useState("");
 
-  // Get today's date
-  const today = moment().format("YYYY-MM-DD");
+    const username = localStorage.getItem('username'); // Get username from storage
 
-  // Filter only upcoming events
-  const upcomingEvents = events.filter(event => event.date >= today);
+    const fetchEvents = async () => {
+        try {
+            const response = await axios.get("http://localhost:5000/api/events/get-events");
+            setEvents(response.data);
+        } catch (error) {
+            console.error("❌ Error fetching events", error);
+        }
+    };
 
-  // Find 'ARANG' event for countdown
-  const arangEvent = upcomingEvents.find(event => event.title.includes("ARANG"));
+    useEffect(() => {
+        fetchEvents();
+    }, []);
 
-  // Countdown state
-  const [countdown, setCountdown] = useState("");
+    const handleAddEvent = async () => {
+        if (!title || !description || !date) {
+            alert('All fields are required.');
+            return;
+        }
 
-  useEffect(() => {
-    if (arangEvent) {
-      const interval = setInterval(() => {
-        const eventDate = moment(arangEvent.date);
-        const now = moment();
-        const duration = moment.duration(eventDate.diff(now));
+        const formattedDate = new Date(date).toISOString();
+        const newEvent = { username, title, description, date: formattedDate };
 
-        // Fixed string interpolation using template literals
-        setCountdown(
-          `${duration.days()}d ${duration.hours()}h ${duration.minutes()}m ${duration.seconds()}s`
-        );
-      }, 1000);
+        try {
+            const response = await axios.post("http://localhost:5000/api/events/add-event", newEvent);
+            if (response.status === 201) {
+                alert("✅ Event Added Successfully!");
+                setTitle("");
+                setDescription("");
+                setDate("");
+                fetchEvents(); // Refresh event list after adding
+            } else {
+                alert("⚠ Something went wrong. Try again.");
+            }
+        } catch (error) {
+            console.error("❌ Error adding event:", error.response?.data || error.message);
+            alert("❌ Failed to add event");
+        }
+    };
 
-      return () => clearInterval(interval);
-    }
-  }, [arangEvent]);
+    return (
+        <div className="event-container">
+            <h1>🎉 Upcoming College Events</h1>
 
-  return (
-    <div className="event-container">
-      <h1>🎉 Upcoming College Events</h1>
+            {username === 'admin' && (
+                <div className="add-event-form upgraded">
+                    <h2>➕ Add New Event</h2>
+                    <input
+                        type="text"
+                        className="styled-input"
+                        placeholder="Event Title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                    <input
+                        type="date"
+                        className="styled-input"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        className="styled-input"
+                        placeholder="Event Description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                    <button className="styled-button" onClick={handleAddEvent}>Add Event</button>
+                </div>
+            )}
 
-      {arangEvent && (
-        <div className="next-event">
-          <h2>⏳ Countdown to: {arangEvent.title}</h2>
-          <p className="countdown">Starts in: {countdown}</p>
+            <div className="event-list">
+                {events.map((event, index) => (
+                    <div key={index} className="event-card">
+                        <div className="event-date">
+                            <span>{moment(event.date).format("ddd")}</span>
+                            <br />
+                            {moment(event.date).format("MMM DD")}
+                        </div>
+                        <div className="event-details">
+                            <h3>{event.title}</h3>
+                            <p>{moment(event.date).format("dddd, MMMM DD, YYYY")}</p>
+                            <p>{event.description}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
-      )}
-
-      <div className="event-list">
-        {upcomingEvents.map((event, index) => (
-          <div key={index} className="event-card">
-            <div className="event-date">
-              <span>{moment(event.date).format("ddd")}</span>
-              <br />
-              {moment(event.date).format("MMM DD")}
-            </div>
-            <div className="event-details">
-              <h3>{event.title}</h3>
-              <p>{moment(event.date).format("dddd, MMMM DD, YYYY")}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Events;

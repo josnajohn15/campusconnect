@@ -8,7 +8,6 @@ const Home = () => {
   return (
     <div className="home-container">
       <ParticleBackground />
-      <Navbar />
 
       {/* Hero Section */}
       <div className="hero-section">

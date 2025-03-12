@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
   {
@@ -8,8 +8,8 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
       match: /^[a-zA-Z0-9_]+$/, // Only alphanumeric characters and underscores
-      minlength: 3, // Ensures username is at least 3 characters
-      maxlength: 20, // Limits username length to 20 characters
+      minlength: 3,
+      maxlength: 20,
     },
     password: {
       type: String,
@@ -17,13 +17,13 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Automatically adds createdAt and updatedAt fields
+    timestamps: false, // Removes createdAt & updatedAt
   }
 );
 
-// Hash password before saving
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+// Hash password before saving (Pre-save hook)
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
 
   try {
     const salt = await bcrypt.genSalt(10);
@@ -34,5 +34,10 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-const User = mongoose.model('User', userSchema);
+// Method to compare passwords
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return bcrypt.compare(enteredPassword, this.password);
+};
+
+const User = mongoose.model("User", userSchema);
 module.exports = User;

@@ -1,41 +1,87 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import moment from "moment";
 import "./Announcements.css";
 
 const Announcements = () => {
-  // List of announcements
-  const announcements = [
-    { title: "Semester Exams Schedule Released", date: "2025-03-05", type: "📅" },
-    { title: "New Library Timings Announced", date: "2025-03-01", type: "📚" },
-    { title: "Internship Fair 2025 - Registrations Open", date: "2025-03-10", type: "💼" },
-    { title: "Annual Sports Meet - Registration Deadline", date: "2025-03-15", type: "🏆" },
-    { title: "Campus Placement Drive - Infosys & TCS", date: "2025-03-20", type: "🚀" },
-  ];
+    const [announcements, setAnnouncements] = useState([]);
+    const [title, setTitle] = useState("");
+    const [message, setMessage] = useState("");
 
-  // Sort announcements by date (latest first)
-  const sortedAnnouncements = announcements.sort(
-    (a, b) => new Date(b.date) - new Date(a.date)
-  );
+    const username = localStorage.getItem("username");
 
-  return (
-    <div className="announcement-container">
-      <h1 className="announcement-title">📢 Important Announcements</h1>
+    useEffect(() => {
+        axios.get("http://localhost:5000/api/announcements/get-announcements")
+            .then((response) => setAnnouncements(response.data))
+            .catch((error) => console.error("❌ Error fetching announcements:", error));
+    }, []);
 
-      <div className="announcement-grid">
-        {sortedAnnouncements.map((announcement, index) => (
-          <div key={index} className="announcement-card">
-            <div className="announcement-header">
-              <span className="announcement-icon">{announcement.type}</span>
-              <h3>{announcement.title}</h3>
+    const handleAddAnnouncement = async () => {
+        if (!title || !message) {
+            alert("All fields are required.");
+            return;
+        }
+
+        try {
+            const response = await axios.post("http://localhost:5000/api/announcements/add-announcement", {
+                username,
+                title,
+                message,
+            });
+
+            if (response.status === 201) {
+                alert("✅ Announcement Added Successfully!");
+                setTitle("");
+                setMessage("");
+                axios.get("http://localhost:5000/api/announcements/get-announcements")
+                    .then((response) => setAnnouncements(response.data));
+            } else {
+                alert("⚠ Something went wrong. Try again.");
+            }
+        } catch (error) {
+            console.error("❌ Error adding announcement:", error);
+            alert("❌ Failed to add announcement");
+        }
+    };
+
+    return (
+        <div className="announcement-container">
+            <h1>📢 Important Announcements</h1>
+
+            {username === "faculty" && (
+                <div className="add-announcement-form improved-form">
+                    <h2>➕ Add New Announcement</h2>
+                    <input
+                        type="text"
+                        className="styled-input"
+                        placeholder="Title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        className="styled-input"
+                        placeholder="Message"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                    />
+                    <button className="styled-button" onClick={handleAddAnnouncement}>Add Announcement</button>
+                </div>
+            )}
+
+            <div className="announcement-list">
+                {announcements.map((announcement) => (
+                    <div key={announcement._id} className="announcement-card">
+                        <h3>{announcement.title}</h3>
+                        <p>{announcement.message}</p>
+                        <p className="announcement-date">
+                            {moment(announcement.createdAt).format("dddd, MMMM DD, YYYY")}
+                        </p>
+                    </div>
+                ))}
             </div>
-            <div className="announcement-footer">
-              <p>{moment(announcement.date).format("dddd, MMMM DD, YYYY")}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default Announcements;

@@ -7,20 +7,22 @@ router.get("/messages", async (req, res) => {
     const messages = await Message.find().sort({ timestamp: 1 });
     res.json(messages);
   } catch (error) {
+    console.error("❌ Error fetching messages:", error);
     res.status(500).json({ error: "Error fetching messages" });
   }
 });
 
 const setupGroupChat = (io) => {
-  io.on("connection", (socket) => {
+  io.on("connection", async (socket) => {
     console.log("✅ User Connected:", socket.id);
 
-    // ✅ Send all previous messages to the user who just connected
-    Message.find()
-      .then((messages) => {
-        socket.emit("previousMessages", messages);
-      })
-      .catch((error) => console.error("❌ Error fetching messages:", error));
+    try {
+      // ✅ Fetch all previous messages when user connects
+      const messages = await Message.find().sort({ timestamp: 1 });
+      socket.emit("previousMessages", messages);
+    } catch (error) {
+      console.error("❌ Error fetching previous messages:", error);
+    }
 
     // ✅ Listen for new messages
     socket.on("sendMessage", async (data) => {
@@ -32,19 +34,20 @@ const setupGroupChat = (io) => {
       }
 
       try {
-        // ✅ Save message to the database
+        // ✅ Save message to MongoDB
         const newMessage = new Message({
           sender: data.sender,
           message: data.message,
-          timestamp: new Date(),
+          timestamp: new Date(), // Ensure timestamp is properly set
         });
 
-        await newMessage.save();
+        const savedMessage = await newMessage.save();
+        console.log("✅ Message saved to DB:", savedMessage);
 
-        // ✅ Broadcast message to all users
-        io.emit("receiveMessage", newMessage);
+        // ✅ Broadcast message to all connected users
+        io.emit("receiveMessage", savedMessage);
       } catch (error) {
-        console.error("❌ Error saving message:", error);
+        console.error("❌ Error saving message to DB:", error.message);
       }
     });
 
